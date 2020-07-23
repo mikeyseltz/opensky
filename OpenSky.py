@@ -6,12 +6,6 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-
-# api = OpenSkyApi()
-# s = api.get_states() 
-# s = api.get_states(bbox=(36,40,-118,-124))
-# states = s.states
-
 r = requests.get("https://opensky-network.org/api/states/all?lamin=36&lomin=-124&lamax=39&lomax=-121")
 
 rest = r.json()
