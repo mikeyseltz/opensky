@@ -3,6 +3,8 @@ import requests
 import json
 from math import radians, degrees, asin, sin, cos, atan2
 import numpy as np
+import plotly.express as px
+import plotly.graph_objects as go 
 
 import matplotlib.pyplot as plt
 
@@ -38,7 +40,7 @@ class Plane:
     def __repr__(self):
         return f"({self.lat}, {self.lon}, {self.hdg}, {self.vel}, {self.callsign})"
 
-    def predict(self, time=1):
+    def predict(self, time=1): # time in minutes
         r = 3958.8 # radius in miles
         brg = radians(self.hdg)
         dist = time * self.vel * 2.23694 / 60 # dist traveled in mph
@@ -60,8 +62,40 @@ for trk in tracks:
     print("currently at: " + str(trk.coords))
     print("heading " + str(trk.hdg) + "deg, at " + str(trk.vel) + "m/s")
     print("will be at: " + str(trk.predict(int(time))))   
-    plt.plot([trk.lon, trk.predict(int(time)).lon], [trk.lat, trk.predict(int(time)).lat])
+    # plt.plot([trk.lon, trk.predict(int(time)).lon], [trk.lat, trk.predict(int(time)).lat])
 
-plt.show()
+
+
+paths = []
+
+for i in range(len(tracks)):
+    paths.append(
+        go.Scattergeo(
+            locationmode = 'USA-states',
+            lon = [tracks[i].lon, tracks[i].predict(int(time)).lon],
+            lat = [tracks[i].lat, tracks[i].predict(int(time)).lat],
+            mode = 'lines',
+            line = dict(width = 1, color = 'red'),
+            opacity = float(tracks[i].vel/max(tracks, key = lambda x: x.vel).vel),
+            hoverinfo = 'text',
+            text = tracks[i].callsign
+            ))
+
+layout = go.Layout(
+    autosize = True,
+    showlegend = False,
+    geo = go.layout.Geo(
+        scope = 'north america',
+        projection = go.layout.geo.Projection(
+            type = 'azimuthal equal area',
+            scale = 11
+            ),
+        center = {'lat': 37, 'lon':-122},
+        )
+    )
+
+fig = go.Figure(data = paths, layout = layout)
+
+fig.show()
 
 
