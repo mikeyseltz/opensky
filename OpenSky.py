@@ -1,8 +1,17 @@
 from opensky_api import OpenSkyApi
+import requests
+import json
+
+
 
 api = OpenSkyApi()
 s = api.get_states()
 # s = api.get_states(bbox=(36,40,-118,-124))
+
+r = requests.get("https://opensky-network.org/api/states/all")
+
+rest = json.loads(r)
+
 states = s.states
 
 tracks = []
