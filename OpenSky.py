@@ -17,7 +17,7 @@ states = rest['states']
 tracks = []
 
 class Coords:
-    def __init__(self, lat, lon):
+    def __init__(self, lat: float, lon: float):
         self.latString = "{:.2f}".format(lat)
         self.longString = "{:.2f}".format(lon)
         self.lat = radians(lat)
@@ -36,15 +36,15 @@ class Plane:
         self.hdg = hdg
         self.vel = vel
         self.callsign = callsign
-        self.coords = Coords(float(self.lat), float(self.lon))
+        # self.coords = Coords(self.lat, self.lon)
 
     def __repr__(self):
-        return self.callsign + "/ heading: " + str(self.hdg)
+        return f"({self.lat}, {self.lon}, {self.hdg}, {self.vel}, {self.callsign})"
 
-    def predict(self, time=60): # i coudln't figure out the other API for start --> end
-        r = 6371 # radius in meters
+    def predict(self, time=60): # this is broken...check equation or use API...
+        r = 3958.8 # radius in miles
         brg = radians(self.hdg)
-        dist = time * self.vel
+        dist = time * self.vel * 2.23694 / 60 / 60
         startLat = self.lat
         startLong = self.lon
         endLat = asin(sin(startLat)*cos(dist/r) + cos(startLat)*sin(dist/r)*cos(brg))
@@ -57,5 +57,5 @@ for trk in states:
 
 rando = tracks[np.random.randint(0,len(tracks))]
 print(rando)
-print("currently at: " + rando.coords)
-print("will be at: " + rando.predict())
+# print("currently at: " + rando.coords)
+print(rando.predict())
