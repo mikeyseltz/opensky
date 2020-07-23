@@ -55,11 +55,11 @@ class Plane:
 for trk in states:
     tracks.append(Plane(trk[6], trk[5], trk[10], trk[9], trk[1]))
 
-time = input("prediction time in minutes >>>")
+time = input("prediction time in minutes >>> ")
 
 for trk in tracks:
     print()
-    print("     **** " + trk.callsign.strip() + " ****")
+    print("      **** " + trk.callsign.strip() + " ****")
     print("currently at: " + str(trk.coords))
     print("heading " + str(trk.hdg) + "deg, at " + str(trk.vel) + "m/s")
     print("will be at: " + str(trk.predict(int(time))))   
