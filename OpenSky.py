@@ -4,6 +4,9 @@ import json
 from math import radians, degrees, asin, sin, cos, atan2
 import numpy as np
 
+import matplotlib.pyplot as plt
+
+
 # api = OpenSkyApi()
 # s = api.get_states() 
 # s = api.get_states(bbox=(36,40,-118,-124))
@@ -20,8 +23,8 @@ class Coords:
     def __init__(self, lat: float, lon: float):
         self.latString = "{:.2f}".format(lat)
         self.longString = "{:.2f}".format(lon)
-        self.lat = radians(lat)
-        self.lon = radians(lon)
+        self.lat = lat
+        self.lon = lon
 
     def __repr__(self):
         if self.lon < 0:
@@ -63,3 +66,8 @@ for trk in tracks:
     print("currently at: " + str(trk.coords))
     print("heading " + str(trk.hdg) + "deg, at " + str(trk.vel) + "m/s")
     print("will be at: " + str(trk.predict(int(time))))   
+    plt.plot([trk.lon, trk.predict(int(time)).lon], [trk.lat, trk.predict(int(time)).lat])
+
+plt.show()
+
+
