@@ -1,18 +1,16 @@
-from opensky_api import OpenSkyApi
+# from opensky_api import OpenSkyApi
 import requests
 import json
 
-
-
-api = OpenSkyApi()
-s = api.get_states()
+# api = OpenSkyApi()
+# s = api.get_states() 
 # s = api.get_states(bbox=(36,40,-118,-124))
+# states = s.states
 
 r = requests.get("https://opensky-network.org/api/states/all")
 
-rest = json.loads(r)
-
-states = s.states
+rest = r.json()
+states = rest['states']
 
 tracks = []
 
@@ -31,4 +29,4 @@ class Plane:
 		pass
 
 for trk in states:
-	tracks.append(Plane(trk.latitude, trk.longitude, trk.heading, trk.velocity, trk.callsign))
+	tracks.append(Plane(trk[5], trk[6], trk[10], trk[9], trk[1]))
