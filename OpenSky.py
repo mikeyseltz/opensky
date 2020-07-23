@@ -2,6 +2,7 @@
 import requests
 import json
 from math import radians, degrees, asin, sin, cos, atan2
+import numpy as np
 
 # api = OpenSkyApi()
 # s = api.get_states() 
@@ -16,7 +17,7 @@ states = rest['states']
 tracks = []
 
 class Coords:
-    def __init__(self, lat: float, lon: float):
+    def __init__(self, lat, lon):
         self.latString = "{:.2f}".format(lat)
         self.longString = "{:.2f}".format(lon)
         self.lat = radians(lat)
@@ -35,6 +36,7 @@ class Plane:
         self.hdg = hdg
         self.vel = vel
         self.callsign = callsign
+        self.coords = Coords(float(self.lat), float(self.lon))
 
     def __repr__(self):
         return self.callsign + "/ heading: " + str(self.hdg)
@@ -52,3 +54,8 @@ class Plane:
 
 for trk in states:
     tracks.append(Plane(trk[5], trk[6], trk[10], trk[9], trk[1]))
+
+rando = tracks[np.random.randint(0,len(tracks))]
+print(rando)
+print("currently at: " + rando.coords)
+print("will be at: " + rando.predict())
