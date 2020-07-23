@@ -29,7 +29,7 @@ class Coords:
             return "N " + self.latString + " E " + self.longString
 
 class Plane:
-    def __init__(self, lat, lon, hdg, vel, callsign="Unk"):
+    def __init__(self, lat, lon, hdg=0, vel=0, callsign="Unk"):
         self.lat = lat
         self.lon = lon
         self.hdg = hdg
@@ -74,7 +74,7 @@ for i in range(len(tracks)):
             locationmode = 'USA-states',
             lon = [tracks[i].lon, tracks[i].predict(int(time)).lon],
             lat = [tracks[i].lat, tracks[i].predict(int(time)).lat],
-            mode = 'lines',
+            mode = 'lines+markers',
             line = dict(width = 1, color = 'red'),
             opacity = float(tracks[i].vel/max(tracks, key = lambda x: x.vel).vel),
             hoverinfo = 'text',
