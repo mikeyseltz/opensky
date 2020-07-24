@@ -52,7 +52,8 @@ class Plane:
         return endCoords
 
 for trk in states:
-    tracks.append(Plane(trk[6], trk[5], trk[10], trk[9], trk[1]))
+    if trk[8] == False:
+        tracks.append(Plane(trk[6], trk[5], trk[10], trk[9], trk[1]))
 
 time = input("prediction time in minutes >>> ")
 
@@ -62,10 +63,7 @@ for trk in tracks:
     print("currently at: " + str(trk.coords))
     print("heading " + str(trk.hdg) + "deg, at " + str(trk.vel) + "m/s")
     print("will be at: " + str(trk.predict(int(time))))   
-    # plt.plot([trk.lon, trk.predict(int(time)).lon], [trk.lat, trk.predict(int(time)).lat])
-
-
-
+    
 paths = []
 
 for i in range(len(tracks)):
@@ -76,6 +74,7 @@ for i in range(len(tracks)):
             lat = [tracks[i].lat, tracks[i].predict(int(time)).lat],
             mode = 'lines+markers',
             line = dict(width = 1, color = 'red'),
+            marker = {'symbol':  [2,0],'size': 7, 'color':"red"},
             opacity = float(tracks[i].vel/max(tracks, key = lambda x: x.vel).vel),
             hoverinfo = 'text',
             text = tracks[i].callsign
@@ -85,17 +84,17 @@ layout = go.Layout(
     autosize = True,
     showlegend = False,
     geo = go.layout.Geo(
+        resolution = 50,
+        showcoastlines=True,
         scope = 'north america',
         projection = go.layout.geo.Projection(
-            type = 'azimuthal equal area',
-            scale = 11
+            type = 'orthographic',
             ),
-        center = {'lat': 37, 'lon':-122},
         )
     )
 
 fig = go.Figure(data = paths, layout = layout)
-
+fig.update_geos(fitbounds='locations')
 fig.show()
 
 
