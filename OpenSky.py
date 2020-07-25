@@ -55,16 +55,16 @@ def main():
         autosize=True,
         showlegend=False,
         geo=go.layout.Geo(
-            resolution = 50,
+            resolution=50,
             showcoastlines=True,
-            scope = 'north america',
-            projection = go.layout.geo.Projection(
-                type = 'orthographic',
+            scope='north america',
+            projection=go.layout.geo.Projection(
+                type='orthographic',
                 ),
             )
         )
 
-    fig = go.Figure(data = paths, layout = layout)
+    fig = go.Figure(data=paths, layout = layout)
     fig.update_geos(fitbounds='locations')
     fig.show()
 
